@@ -34,7 +34,6 @@ body {
 
 /* --- ICONS & SVGs --- */
 .svg-icon { width: 100%; height: 100%; }
-/* En dark mode, el stroke de los iconos del dashboard debe ser claro */
 body.dark-mode .card-icon svg { stroke: var(--text); }
 .svg-small { width: 24px; height: 24px; }
 
@@ -44,6 +43,7 @@ body.dark-mode .card-icon svg { stroke: var(--text); }
     overflow-y: auto; padding: 20px; box-sizing: border-box;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
     background: var(--bg); opacity: 0; pointer-events: none; transform: scale(0.95);
+    display: flex; flex-direction: column;
 }
 .view.active { opacity: 1; pointer-events: all; transform: scale(1); z-index: 10; }
 
@@ -72,16 +72,24 @@ body.dark-mode .card-icon svg { stroke: var(--text); }
 .card-title { font-weight: 700; font-size: 1rem; }
 .card-del { position: absolute; top: 10px; right: 10px; background: #fee2e2; color: #ef4444; border: none; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
-/* --- CREATOR --- */
+/* --- CREATOR VIEW (FIXED) --- */
 .header-row { display: flex; justify-content: space-between; align-items: center; }
 .btn-icon-add { background: var(--primary); color: var(--bg); border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-.creator-panel { background: var(--card); padding: 20px; border-radius: var(--radius); margin-top: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); }
-.hidden { display: none; }
+
+.creator-content { flex-grow: 1; overflow-y: auto; padding-top: 10px; }
 .input-modern { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; font-size: 1rem; background: var(--input-bg); color: var(--text); box-sizing: border-box; margin-bottom: 10px; outline: none; }
 .row { display: flex; gap: 10px; margin-bottom: 10px; }
-.faces-scroll { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; max-height: 150px; overflow-y: auto; margin-bottom: 15px; }
 
-.btn-primary { background: var(--primary); color: var(--bg); width: 100%; padding: 12px; border: none; border-radius: 12px; font-weight: bold; }
+.faces-grid-large { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 12px; margin-top: 10px; }
+.faces-grid-large .face-input { height: 50px; font-size: 1.2rem; text-align: center; }
+
+.bottom-action {
+    position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px;
+    background: linear-gradient(to top, var(--bg) 80%, transparent);
+    box-sizing: border-box; display: flex; justify-content: center;
+}
+
+.btn-primary { background: var(--primary); color: var(--bg); width: 100%; padding: 12px; border: none; border-radius: 12px; font-weight: bold; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3); }
 .btn-secondary { background: var(--border); color: var(--text); border: none; padding: 0 15px; border-radius: 12px; }
 .btn-cancel { background: transparent; color: var(--gray); border: none; padding: 12px; }
 
@@ -91,32 +99,26 @@ body.dark-mode .card-icon svg { stroke: var(--text); }
 .arena-settings { background: var(--card); padding: 5px 15px; border-radius: 20px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--border); }
 #arenaQty { width: 40px; border: none; background: transparent; color: var(--text); font-size: 1.1rem; font-weight: bold; text-align: center; outline: none;}
 
-.arena-content { height: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+.arena-content { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
 #arena-title { font-size: 4rem; color: var(--text); margin: 0; position: absolute; top: 10%; z-index: -1; font-weight: 900; opacity: 0.1;}
 .result-display { min-height: 200px; width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 20px; margin: 20px 0; perspective: 1000px; }
 
-/* --- ELEMENTOS ANIMADOS --- */
+/* --- ANIMACIONES & RESULTADOS --- */
 .die-container, .coin-container { width: 100px; height: 100px; position: relative; display: flex; justify-content: center; align-items: center; }
-
-/* El cuerpo del dado/moneda ahora usa el color de la tarjeta y el texto */
 .arena-svg { width: 100px; height: 100px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); color: var(--text); }
 .arena-svg path, .arena-svg rect, .arena-svg circle { stroke-width: 1.5; fill: var(--card); }
 
-/* Texto dentro del dado (ELIMINACIÓN DE SPOILER) */
 .result-text {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
     font-size: 1.2rem; font-weight: 800; color: var(--text); text-align: center; width: 80%; word-wrap: break-word; z-index: 2;
-    opacity: 0; /* OCULTO INICIALMENTE */
+    opacity: 0; 
 }
 
-/* Animación para revelar el texto al final */
 @keyframes revealText {
     0%, 70% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
     100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
-/* Esta clase se añade al texto cuando rueda */
 .anim-reveal { animation: revealText 0.6s ease-out forwards; }
-
 
 @keyframes spin3d {
     0% { transform: rotate3d(1, 1, 1, 0deg) scale(0.5); opacity: 0; }
@@ -136,32 +138,12 @@ body.dark-mode .card-icon svg { stroke: var(--text); }
 }
 .btn-roll:active { transform: scale(0.95); box-shadow: 0 5px 10px -5px rgba(0,0,0,0.2); }
 
+/* --- FOOTER --- */
+.app-footer { text-align: center; padding: 20px 0; margin-top: auto; width: 100%; position: relative; z-index: 5; }
+.github-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text); text-decoration: none; font-size: 0.8rem; opacity: 0.4; transition: opacity 0.2s, transform 0.2s; }
+.github-link:hover { opacity: 1; transform: translateY(-2px); }
+
 @media (min-width: 600px) {
-    body { display: flex; justify-content: center; background: #333; } /* Fondo oscuro en desktop para resaltar la app */
-    #view-dashboard, #view-arena { width: 450px; height: 90vh; border-radius: 30px; margin-top: 5vh; box-shadow: 0 20px 50px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
-}
-
-.app-footer {
-    text-align: center;
-    padding: 20px 0;
-    margin-top: auto; /* Empuja el footer al fondo si hay espacio */
-    width: 100%;
-    position: relative;
-    z-index: 5;
-}
-
-.github-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--text);
-    text-decoration: none;
-    font-size: 0.8rem;
-    opacity: 0.4;
-    transition: opacity 0.2s, transform 0.2s;
-}
-
-.github-link:hover {
-    opacity: 1;
-    transform: translateY(-2px);
+    body { display: flex; justify-content: center; background: #333; }
+    #view-dashboard, #view-arena, #view-creator { width: 450px; height: 90vh; border-radius: 30px; margin-top: 5vh; box-shadow: 0 20px 50px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
 }

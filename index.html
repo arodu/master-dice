@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+    
     <title>Master Dice | Ultimate Roller</title>
-    <meta name="description"
-        content="Premium, minimalist custom dice roller. Create your own dice, flip coins, and roll D20s with 3D animations and Dark Mode.">
-    <meta name="keywords"
-        content="dice roller, custom dice, d20, coin flip, rpg tools, dark mode dice, pwa, mobile first">
+    <meta name="description" content="Premium, minimalist custom dice roller. Create your own dice, flip coins, and roll D20s with 3D animations and Dark Mode.">
+    <meta name="keywords" content="dice roller, custom dice, d20, coin flip, rpg tools, dark mode dice, pwa, mobile first">
     <meta name="author" content="Alberto Rodriguez">
 
     <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
@@ -18,45 +15,29 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://arodu.github.io/master-dice/">
     <meta property="og:title" content="Master Dice | Ultimate">
-    <meta property="og:description"
-        content="Roll custom dice and coins with beautiful 3D animations. Created by Alberto Rodriguez.">
-    <meta property="og:image" content="https://arodu.github.io/master-dice/social-image.png">
+    <meta property="og:description" content="Roll custom dice and coins with beautiful 3D animations. Created by Alberto Rodriguez.">
+    <meta property="og:image" content="https://arodu.github.io/master-dice/social-image.jpg">
 
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://arodu.github.io/master-dice/">
     <meta property="twitter:title" content="Master Dice | Ultimate">
     <meta property="twitter:description" content="Roll custom dice and coins with beautiful 3D animations.">
-    <meta property="twitter:image" content="https://arodu.github.io/master-dice/social-image.png">
-
+    <meta property="twitter:image" content="https://arodu.github.io/master-dice/social-image.jpg">
+    
     <link rel="stylesheet" href="style.css">
-    <link rel="icon"
-        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234f46e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='4'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Ccircle cx='15.5' cy='15.5' r='1.5'/%3E%3C/svg%3E">
+    
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234f46e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='4'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Ccircle cx='15.5' cy='15.5' r='1.5'/%3E%3C/svg%3E">
 </head>
-
 <body>
 
     <main id="view-dashboard" class="view active">
         <header class="app-header">
             <h1 class="logo">Master<span>Dice</span></h1>
-
+            
             <div class="header-controls">
                 <button id="themeToggle" class="btn-theme">
-                    <svg id="icon-sun" class="svg-small" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5" />
-                        <path d="M12 1v2" />
-                        <path d="M12 21v2" />
-                        <path d="M4.22 4.22l1.42 1.42" />
-                        <path d="M18.36 18.36l1.42 1.42" />
-                        <path d="M1 12h2" />
-                        <path d="M21 12h2" />
-                        <path d="M4.22 19.78l1.42-1.42" />
-                        <path d="M18.36 5.64l1.42-1.42" />
-                    </svg>
-                    <svg id="icon-moon" class="svg-small hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                    </svg>
+                    <svg id="icon-sun" class="svg-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2"/><path d="M12 21v2"/><path d="M4.22 4.22l1.42 1.42"/><path d="M18.36 18.36l1.42 1.42"/><path d="M1 12h2"/><path d="M21 12h2"/><path d="M4.22 19.78l1.42-1.42"/><path d="M18.36 5.64l1.42-1.42"/></svg>
+                    <svg id="icon-moon" class="svg-small hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                 </button>
 
                 <select id="languageSelector" class="lang-pill">
@@ -86,55 +67,28 @@
 
             <div class="header-row mt-40">
                 <h2 class="section-title" data-i18n="title_custom">My Collection</h2>
-                <button class="btn-icon-add" onclick="app.toggleCreator()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
+                <button class="btn-icon-add" onclick="app.openCreator()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
             </div>
-
+            
             <div id="saved-grid" class="dice-grid"></div>
-
-            <div id="creator-panel" class="creator-panel hidden">
-                <h3 data-i18n="create_title">New Custom Die</h3>
-                <input type="text" id="newDieName" class="input-modern" placeholder="Name">
-                <div class="row">
-                    <input type="number" id="newDieFacesQty" class="input-modern small" value="6" min="2">
-                    <button class="btn-secondary" onclick="app.generateFacesInputs()" data-i18n="btn_set">Set
-                        Faces</button>
-                </div>
-                <div id="faces-container" class="faces-scroll"></div>
-                <div class="row actions">
-                    <button class="btn-cancel" onclick="app.toggleCreator()" data-i18n="btn_cancel">Cancel</button>
-                    <button class="btn-primary" onclick="app.saveNewDie()" data-i18n="btn_save">Save</button>
-                </div>
-            </div>
         </div>
 
-
-
         <footer class="app-footer">
-            <a href="https://github.com/arodu/master-dice" target="_blank" rel="noopener noreferrer"
-                class="github-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path
-                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                    </path>
+            <a href="https://github.com/arodu/master-dice" target="_blank" rel="noopener noreferrer" class="github-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                 </svg>
                 <span>Fork me on GitHub</span>
             </a>
         </footer>
-
     </main>
 
     <main id="view-arena" class="view">
         <nav class="arena-nav">
             <button class="btn-back" onclick="app.goHome()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 <span data-i18n="btn_back">Back</span>
             </button>
             <div class="arena-settings">
@@ -152,9 +106,37 @@
         </div>
     </main>
 
+    <main id="view-creator" class="view">
+        <nav class="arena-nav">
+            <button class="btn-back" onclick="app.closeCreator()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                <span data-i18n="btn_cancel">Cancel</span>
+            </button>
+            <h2 style="font-size:1.1rem; margin:0; font-weight:700" data-i18n="create_title">New Die</h2>
+            <div style="width:20px"></div>
+        </nav>
+
+        <div class="creator-content">
+            <label class="section-title" style="margin-top:20px; display:block;">Name</label>
+            <input type="text" id="newDieName" class="input-modern" placeholder="e.g. Fire Sword">
+            
+            <label class="section-title" style="margin-top:20px; display:block;">Faces Quantity</label>
+            <div class="row">
+                <input type="number" id="newDieFacesQty" class="input-modern" value="6" min="2" style="text-align:center">
+                <button class="btn-secondary" onclick="app.generateFacesInputs()" data-i18n="btn_set">Set</button>
+            </div>
+            
+            <label class="section-title" style="margin-top:10px; display:block;">Faces Values</label>
+            <div id="faces-container" class="faces-grid-large"></div>
+            
+            <div style="height:100px"></div> </div>
+
+        <div class="bottom-action">
+            <button class="btn-primary" onclick="app.saveNewDie()" data-i18n="btn_save">Save Die</button>
+        </div>
+    </main>
 
     <script src="translations.js"></script>
     <script src="main.js"></script>
 </body>
-
 </html>

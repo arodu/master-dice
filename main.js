@@ -6,7 +6,6 @@ const ICONS = {
     custom: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`
 };
 
-// SVGs para la Arena (Usan currentColor para adaptarse al tema)
 const ARENA_SVGS = {
     coin: `<svg class="arena-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>`,
     die: `<svg class="arena-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/></svg>`
@@ -15,9 +14,14 @@ const ARENA_SVGS = {
 const app = {
     lang: 'en',
     currentDie: null, 
-    
+    sounds: {
+        // Asegúrate de tener estos archivos en la carpeta /sounds o comenta estas líneas
+        dice: new Audio('sounds/dice.mp3'),
+        coin: new Audio('sounds/coin.mp3')
+    },
+
     init: function() {
-        this.initTheme(); // Inicializar tema
+        this.initTheme();
         this.detectLanguage();
         this.renderIcons();
         this.renderSaved();
@@ -27,17 +31,25 @@ const app = {
             if(e.target.value === 'auto') this.detectLanguage();
             else this.setLanguage(e.target.value);
         });
-
-        // Listener Dark Mode
         document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
     },
 
-    // --- TEMA (Dark Mode) ---
+    // --- SOUND HELPER ---
+    playSound: function(type) {
+        // Manejo básico de error por si no existe el archivo
+        try {
+            const sound = type === 'coin' ? this.sounds.coin : this.sounds.dice;
+            sound.currentTime = 0;
+            sound.volume = 0.5;
+            sound.play().catch(e => {/* Ignorar errores de autoplay policy */});
+        } catch(e) {}
+    },
+
+    // --- THEME ---
     initTheme: function() {
-        const savedTheme = localStorage.getItem('theme');
-        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        // Si está guardado 'dark' O no hay nada guardado y el sistema es dark
-        if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+        const saved = localStorage.getItem('theme');
+        const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && sysDark)) {
             document.body.classList.add('dark-mode');
             this.updateThemeIcons(true);
         } else {
@@ -55,7 +67,7 @@ const app = {
         document.getElementById('icon-moon').classList.toggle('hidden', !isDark);
     },
 
-    // --- FUNCIONES BASE ---
+    // --- I18N ---
     renderIcons: function() {
         document.getElementById('icon-coin-dash').innerHTML = ICONS.coin;
         document.getElementById('icon-d6-dash').innerHTML = ICONS.die;
@@ -76,14 +88,15 @@ const app = {
         document.getElementById('newDieName').placeholder = texts.placeholder_name;
     },
     t: function(key) { return TRANSLATIONS[this.lang][key] || key; },
+
+    // --- NAVIGATION ---
     goHome: function() {
         document.getElementById('view-arena').classList.remove('active');
         document.getElementById('view-dashboard').classList.add('active');
-        // Limpiar arena al salir
         setTimeout(() => { document.getElementById('arena-result').innerHTML = ''; }, 300);
     },
 
-    // --- LOGICA ARENA ---
+    // --- ARENA ---
     openArena: function(type, customId = null) {
         if (type === 'coin') {
             this.currentDie = { type: 'coin', name: this.t('dice_coin'), faces: this.lang === 'es' ? ['Cara', 'Cruz'] : ['Heads', 'Tails'] };
@@ -98,7 +111,6 @@ const app = {
         }
 
         document.getElementById('arena-title').innerText = this.currentDie.name;
-        // Mostrar placeholder estático (sin texto, opacity baja)
         const placeholderBg = this.currentDie.type === 'coin' ? ARENA_SVGS.coin : ARENA_SVGS.die;
         document.getElementById('arena-result').innerHTML = `<div class="die-container" style="opacity:0.3">${placeholderBg}</div>`;
         
@@ -106,7 +118,6 @@ const app = {
         document.getElementById('view-arena').classList.add('active');
     },
 
-    // --- LANZAMIENTO CON ANTISPOILER ---
     rollNow: function() {
         const qty = parseInt(document.getElementById('arenaQty').value) || 1;
         const resultContainer = document.getElementById('arena-result');
@@ -114,15 +125,15 @@ const app = {
         const isCoin = this.currentDie.type === 'coin';
 
         resultContainer.innerHTML = '';
+        this.playSound(isCoin ? 'coin' : 'dice');
 
         for(let i=0; i<qty; i++) {
             const wrapper = document.createElement('div');
             wrapper.className = isCoin ? 'coin-container' : 'die-container';
-            
             const svgBg = isCoin ? ARENA_SVGS.coin : ARENA_SVGS.die;
             const val = faces[Math.floor(Math.random() * faces.length)];
             
-            // AQUI ESTA LA CLAVE: Agregamos la clase 'anim-reveal' al texto
+            // Texto con clase antispoiler
             wrapper.innerHTML = `
                 ${svgBg}
                 <div class="result-text anim-reveal">${val}</div>
@@ -130,16 +141,26 @@ const app = {
 
             wrapper.style.animation = 'none';
             wrapper.offsetHeight; 
-            wrapper.style.animation = isCoin 
-                ? 'flipCoin 0.6s ease-out forwards' 
-                : 'spin3d 0.6s ease-out forwards';
+            wrapper.style.animation = isCoin ? 'flipCoin 0.6s ease-out forwards' : 'spin3d 0.6s ease-out forwards';
             
             resultContainer.appendChild(wrapper);
         }
     },
 
-    // --- CREADOR ---
-    toggleCreator: function() { document.getElementById('creator-panel').classList.toggle('hidden'); },
+    // --- CREATOR (FULL SCREEN) ---
+    openCreator: function() {
+        document.getElementById('newDieName').value = '';
+        document.getElementById('newDieFacesQty').value = 6;
+        this.generateFacesInputs();
+        document.getElementById('view-dashboard').classList.remove('active');
+        document.getElementById('view-creator').classList.add('active');
+    },
+
+    closeCreator: function() {
+        document.getElementById('view-creator').classList.remove('active');
+        document.getElementById('view-dashboard').classList.add('active');
+    },
+
     generateFacesInputs: function() {
         const qty = parseInt(document.getElementById('newDieFacesQty').value);
         const container = document.getElementById('faces-container');
@@ -147,24 +168,27 @@ const app = {
         for(let i=0; i<qty; i++) {
             const input = document.createElement('input');
             input.className = 'input-modern face-input';
-            input.placeholder = i+1; input.value = i+1; input.style.textAlign = 'center';
+            input.placeholder = i+1; input.value = i+1;
             container.appendChild(input);
         }
     },
+
     saveNewDie: function() {
         const name = document.getElementById('newDieName').value.trim();
         if(!name) return alert(this.t('alert_name'));
         const inputs = document.querySelectorAll('#faces-container .face-input');
         if(inputs.length < 2) return alert(this.t('alert_faces'));
         const faces = Array.from(inputs).map(i => i.value || i.placeholder);
+        
         const newDie = { id: Date.now(), name: name, faces: faces };
         const list = JSON.parse(localStorage.getItem('minimalDice') || '[]');
         list.push(newDie);
         localStorage.setItem('minimalDice', JSON.stringify(list));
+        
         this.renderSaved();
-        this.toggleCreator();
-        document.getElementById('newDieName').value = ''; document.getElementById('faces-container').innerHTML = '';
+        this.closeCreator();
     },
+
     deleteDie: function(e, id) {
         e.stopPropagation();
         if(!confirm('Delete?')) return;
@@ -173,6 +197,7 @@ const app = {
         localStorage.setItem('minimalDice', JSON.stringify(list));
         this.renderSaved();
     },
+
     renderSaved: function() {
         const grid = document.getElementById('saved-grid');
         const list = JSON.parse(localStorage.getItem('minimalDice') || '[]');
