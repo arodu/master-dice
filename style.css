@@ -140,3 +140,28 @@ body.dark-mode .card-icon svg { stroke: var(--text); }
     body { display: flex; justify-content: center; background: #333; } /* Fondo oscuro en desktop para resaltar la app */
     #view-dashboard, #view-arena { width: 450px; height: 90vh; border-radius: 30px; margin-top: 5vh; box-shadow: 0 20px 50px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
 }
+
+.app-footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: auto; /* Empuja el footer al fondo si hay espacio */
+    width: 100%;
+    position: relative;
+    z-index: 5;
+}
+
+.github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.8rem;
+    opacity: 0.4;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.github-link:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
